@@ -1,0 +1,36 @@
+this is the code from "Test-Driven Apache Module Development",
+a tutorial given at ApacheCon 2004.
+
+each directory holds a self-contained code example from the
+tutorial.  to run the tests just cd to the proper directory
+then issue the following:
+
+  $ perl Makefile.PL -apxs /usr/local/apache2/bin/apxs
+
+if your built Apache as a DSO, or
+
+  $ perl Makefile.PL -httpd /usr/local/apache2/bin/httpd
+
+if you built it statically.
+
+then, just run
+
+  $ make
+  $ make test TEST_VERBOSE=1
+
+and you should be on your way.  if you do not have Apache-Test 
+installed, you can use the copy provided in this tarball (1.16).
+a simple
+
+  $ export PERL5LIB=/path/to/T07-2004-code/Apache-Test/lib
+
+ought to do the trick.
+
+the original tutorial presentation can be found here
+
+  http://www.modperlcookbook.org/~geoff/slides/ApacheCon/2004/T07-2004.pdf
+
+at the end of the tutorial are links to helpful documentation,
+articles, etc, so check there if you need additional pointers.
+
+--Geoff

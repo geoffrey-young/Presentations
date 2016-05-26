@@ -1,0 +1,6 @@
+Hijack.pm
+Makefile.PL
+MANIFEST			This list of files
+t/conf/extra.conf.in
+t/htdocs/foo.php
+t/php.t

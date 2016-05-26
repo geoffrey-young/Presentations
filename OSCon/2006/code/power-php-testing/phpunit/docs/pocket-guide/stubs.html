@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><title>Chapter 10. Stubs</title><link rel="stylesheet" href="docbook.css" type="text/css"></link><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></meta><link rel="start" href="index.html" title="PHPUnit Pocket Guide"></link><link rel="up" href="index.html" title="PHPUnit Pocket Guide"></link><link rel="prev" href="code-coverage-analysis.html" title="Chapter 9. Code-Coverage Analysis"></link><link rel="next" href="other-uses-for-tests.html" title="Chapter 11. Other Uses for Tests"></link><script xmlns="" src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script><script xmlns="" type="text/javascript">_uacct = "UA-68261-2";urchinTracker();</script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 10. Stubs</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="code-coverage-analysis.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="other-uses-for-tests.html">Next</a></td></tr></table><hr></hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="stubs"></a>Chapter 10. Stubs</h2></div></div></div><p>
+    <a id="id401319" class="indexterm"></a>
+
+    Tests that only test one thing are more informative than tests where
+    failure can come from many sources. How can you isolate your tests from
+    external influences? Simply put, by replacing the expensive, messy,
+    unreliable, slow, complicated resources with stubs made from plain PHP
+    objects. For example, you can implement what is in reality a complicated
+    computation by returning a constant, at least for the purposes of a
+    single test.
+  </p><p>
+    <a id="id401374" class="indexterm"></a>
+
+    Stubs solve the problem of allocating expensive external resources.
+    For example, sharing a resource, such as a database connection, between
+    tests by using the <code class="literal">PHPUnit2_Extensions_TestSetup</code>
+    decorator helps, but not using the database for the purposes of the tests
+    at all is even better.
+  </p><p>
+    Design improvement is one effect of using stubs. Widely used resources
+    are accessed through a single façade, so you can easily replace the
+    resource with the stub. For example, instead of having direct database
+    calls scattered throughout the code, you have a single
+    <code class="literal">Database</code> object, an implementor of the
+    <code class="literal">IDatabase</code> interface. Then, you can create a stub
+    implementation of <code class="literal">IDatabase</code> and use it for your
+    tests. You can even create an option for running the tests with the
+    stub database or the real database, so you can use your tests for both
+    local testing during development and integration testing with the real
+    database.
+  </p><p>
+    Functionality that needs to be stubbed out tends to cluster in the same
+    object, improving cohesion. By presenting the functionality with a
+    single, coherent interface, you reduce the coupling with the rest of the
+    system.
+  </p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="stubs.self-shunting"></a>Self-Shunting</h2></div></div></div><p>
+      <a id="id402049" class="indexterm"></a>
+
+      Sometimes you need to check that an object has been called correctly. You
+      can create a complete stub of the object to be called, but that can make
+      it inconvenient to check for correct results. A simpler solution is to
+      apply the <span class="emphasis"><em>Self Shunt Pattern</em></span> and use the test-case
+      object itself as a stub. The term self-shunting is taken from the medical
+      practice of installing a tube that takes blood from an artery and returns
+      it to a vein to provide a convenient place for injecting drugs.
+    </p><p>
+      <a id="id402073" class="indexterm"></a>
+
+      Here is an example: suppose we want to test that the correct method is
+      called on an object that observes another object. First, we make our
+      test-case class an implementor of <code class="literal">Observer</code>:
+</p><pre class="programlisting"><code>class ObserverTest extends PHPUnit2_Framework_TestCase implements Observer {
+}</code></pre><p>
+    </p><p>
+      Next, we implement the one <code class="literal">Observer</code> method,
+      <code class="literal">update()</code>, to check that it is called when the state
+      of the observed <code class="literal">Subject</code> object changes:
+</p><pre class="programlisting"><code>public $wasCalled = FALSE;
+
+public function update(Subject $subject) {
+    $this-&gt;wasCalled = TRUE;
+}</code></pre><p>
+    </p><p>
+      Now, we can write our test. We create a new <code class="literal">Subject</code>
+      object and attach the test object to it as an observer. When the state
+      of the <code class="literal">Subject</code> changes -- for instance, by calling its
+      <code class="literal">doSomething()</code> method -- the <code class="literal">Subject</code>
+      object has to call the <code class="literal">update()</code> method on all objects
+      that are registered as observers. We use the <code class="literal">$wasCalled</code>
+      instance variable that is set by our implementation of
+      <code class="literal">update()</code> to check whether the <code class="literal">Subject</code>
+      object does what it is supposed to do:
+
+</p><pre class="programlisting"><code>public function testUpdate() {
+    $subject = new Subject;
+    $subject-&gt;attach($this);
+    $subject-&gt;doSomething();
+
+    $this-&gt;assertTrue($this-&gt;wasCalled);
+}</code></pre><p>
+    </p><p>
+      Notice that we create a new <code class="literal">Subject</code> object instead of
+      relying on a global instance. Stubbing encourages this style of design.
+      It reduces the coupling between objects and improves reuse.
+    </p><p>
+      If you are not familiar with the self-shunt pattern, the tests can be
+      hard to read. What is going on here? Why is a test case also an
+      observer? Once you get used to the idiom, the tests are easy to read.
+      Everything you need to understand the test is in one class.
+    </p></div></div><div class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="code-coverage-analysis.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="other-uses-for-tests.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 9. Code-Coverage Analysis </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 11. Other Uses for Tests</td></tr></table></div><div xmlns="" class="copyright-notice"><a href="appendixes.copyright.html">Copyright</a> © 2005 <a href="http://www.sebastian-bergmann.de/">Sebastian Bergmann</a>
+      and <a href="http://www.oreilly.com/">O'Reilly Media, Inc.</a>.
+    </div></body></html>

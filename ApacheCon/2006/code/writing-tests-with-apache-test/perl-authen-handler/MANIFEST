@@ -1,0 +1,7 @@
+lib/My/AuthenHandler.pm
+Makefile.PL
+MANIFEST			This list of files
+t/01basic.t
+t/02basic.t
+t/03basic.t
+t/conf/extra.conf.in

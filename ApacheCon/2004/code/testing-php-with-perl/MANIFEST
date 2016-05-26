@@ -1,0 +1,24 @@
+INSTALL
+Makefile.PL
+MANIFEST			This list of files
+META.yml
+README
+t/01login.t
+t/02logout.t
+t/03admin.t
+t/conf/extra.conf.in
+t/htdocs/admin/add.php
+t/htdocs/admin/delete.php
+t/htdocs/admin/index.php
+t/htdocs/db.sqlite
+t/htdocs/functions.inc
+t/htdocs/index.php
+t/htdocs/login.php
+t/htdocs/logout.php
+t/htdocs/phpinfo.php
+t/htdocs/register.php
+t/response/TestFunctions/01add_user.php
+t/response/TestFunctions/02delete_user.php
+t/response/TestFunctions/03check_login.php
+t/response/TestFunctions/04encrypt_password.php
+t/response/TestFunctions/05check_admin.php

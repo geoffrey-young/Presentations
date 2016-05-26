@@ -1,0 +1,43 @@
+--
+INSTALLING APACHE WITH MOD_PHP
+(Apache/1.3.31 (Unix) PHP/5.0.2)
+--
+
+$ tar -xvzf apache_1.3.31.tar.gz
+$ tar -xvzf php-5.0.2.tar.gz
+$ cd apache_1.3.31
+$ ./configure
+$ cd ../php-5.0.2
+$ ./configure --prefix=/usr/local/php \
+  --with-apache=../apache_1.3.31 --with-pear \
+  --with-gd --with-mysql=/usr/local/mysql \
+  --enable-sockets --with-zlib-dir=/usr/include
+$ make
+$ sudo make install
+$ cd ../apache_1.3.31
+$ ./configure --prefix=/usr/local/apache \
+  --activate-module=src/modules/php5/libphp5.a \
+  --enable-module=most --enable-shared=max
+$ make
+$ sudo make install
+
+--
+EDITING APACHE CONFIGURATION FILE
+(/usr/local/apache/conf/httpd.conf)
+--
+
+s/Port 8080/Port 80
+
+AddType application/x-httpd-php .php
+AddType application/x-httpd-php-source .phps
+
+--
+INSTALLING APACHE-TEST
+--
+
+$ cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic login
+$ cvs -d :pserver:anoncvs@cvs.apache.org:/home/cvspublic co httpd-test
+$ cd httpd-test/perl-framework/Apache-Test
+$ perl Makefile.PL -apxs /usr/local/apache/bin/apxs
+$ make
+$ sudo make install

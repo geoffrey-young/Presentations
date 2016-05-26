@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><title>Preface</title><link rel="stylesheet" href="docbook.css" type="text/css"></link><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></meta><link rel="start" href="index.html" title="PHPUnit Pocket Guide"></link><link rel="up" href="index.html" title="PHPUnit Pocket Guide"></link><link rel="prev" href="index.html" title="PHPUnit Pocket Guide"></link><link rel="next" href="automating-tests.html" title="Chapter 1. Automating Tests"></link><script xmlns="" src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script><script xmlns="" type="text/javascript">_uacct = "UA-68261-2";urchinTracker();</script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Preface</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="automating-tests.html">Next</a></td></tr></table><hr></hr></div><div class="preface" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="preface"></a>Preface</h2></div></div></div><p>
+    For a very long time my answer to the question "When will you write
+    documentation for PHPUnit?" has been "You do not need documentation for
+    PHPUnit. Just read the documentation for JUnit or a buy a book on JUnit
+    and adapt the code examples from Java and JUnit to PHP and PHPUnit."
+    When I mentioned this to Barbara Weiss and Alexandra Follenius from the
+    O'Reilly Germany office they encouraged me to think it over and
+    write a book that would serve as the documentation for PHPUnit.
+  </p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id344148"></a>Requirements</h2></div></div></div><p>
+      The topic of this book is PHPUnit, an open source framework for test-driven
+      development with the PHP programming language. This book covers Version
+      2.3 of PHPUnit. Most of the examples should work, however, with PHPUnit
+      versions 2.0-2.2. The "PHPUnit for PHP 4" section, later in this book,
+      covers the older, no longer actively developed version of PHPUnit for
+      PHP 4.
+    </p><p>
+      The reader should have a good understanding of object-oriented
+      programming with PHP 5. To German readers I can recommend my own book on
+      PHP 5, [<a href="appendixes.bibliography.html#Bergmann2005" title="[Bergmann2005]"><span class="abbrev">Bergmann2005</span></a>], as an introduction to
+      object-oriented programming with PHP 5. A good English book on the subject
+      is [<a href="appendixes.bibliography.html#GuBaRe2005" title="[GuBaRe2005]"><span class="abbrev">GuBaRe2005</span></a>] by Andi Gutmans, Stig Bakken, and Derick
+      Rethans.
+    </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id344167"></a>This Book Is Free</h2></div></div></div><p>
+      This book is available under the Creative Commons license. You will
+      always find the latest version of this book on its website at
+      <code class="uri">http://www.phpunit.de/pocket_guide/</code>.
+      You may distribute and make changes to this book however you wish. Of
+      course, rather than distribute your own private version of the book,
+      I would prefer you send feedback and patches to
+      <code class="email">&lt;<a href="mailto:sb@sebastian-bergmann.de">sb@sebastian-bergmann.de</a>&gt;</code>.
+    </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id393269"></a>Conventions Used in This Book</h2></div></div></div><p>
+      The following is a list of typographical conventions used in this book:
+    </p><div class="variablelist"><dl><dt><span class="term"><span class="emphasis"><em>Italic</em></span></span></dt><dd><p>
+            Indicates new terms, URLs, email addresses, filenames, file
+            extensions, pathnames, directories, and Unix utilities.
+          </p></dd><dt><span class="term"><code class="literal">Constant width</code></span></dt><dd><p>
+            Indicates commands, options, switches, variables, functions,
+            classes, namespaces, methods, modules, parameters, values,
+            objects, the contents of files, or the output from commands.
+          </p></dd><dt><span class="term"><strong class="userinput"><code>Constant width bold</code></strong></span></dt><dd><p>
+            Shows commands or other text that should be typed literally
+            by the user.
+          </p></dd><dt><span class="term"><em class="replaceable"><code>Constant width italic</code></em></span></dt><dd><p>
+            Shows text that should be replaced with user-supplied values. 
+          </p></dd></dl></div><p>
+      You should pay special attention to notes set apart from the text
+      with the following styles:
+    </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+        This is a tip, suggestion, or general note. It contains useful
+        supplementary information about the topic at hand.
+      </p></div><div class="warning" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Warning</h3><p>
+        This is a warning or note of caution.
+      </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id394205"></a>Acknowledgements</h2></div></div></div><p>
+      I would like to thank Kent Beck and Erich Gamma for JUnit and the
+      inspiration to write PHPUnit. I would also like to thank Kent Beck for
+      his "JUnit Pocket Guide" [<a href="appendixes.bibliography.html#Beck2004" title="[Beck2004]"><span class="abbrev">Beck2004</span></a>], which sparked the
+      idea for this book. I would like to thank Allison Randal, Alexandra
+      Follenius, and Barbara Weiss for sponsoring this book at O'Reilly.
+    </p><p>
+      I would like to thank Andi Gutmans, Zeev Suraski, and Marcus Börger
+      for their work on the Zend Engine 2, the core of PHP 5. I would like to
+      thank Derick Rethans for Xdebug, the PHP extension that makes PHPUnit's
+      Code Coverage functionality possible. Finally, I would like to thank
+      Michiel Rook, who wrote the PHPUnit tasks for Phing.
+    </p></div></div><div class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="automating-tests.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">PHPUnit Pocket Guide </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 1. Automating Tests</td></tr></table></div><div xmlns="" class="copyright-notice"><a href="appendixes.copyright.html">Copyright</a> © 2005 <a href="http://www.sebastian-bergmann.de/">Sebastian Bergmann</a>
+      and <a href="http://www.oreilly.com/">O'Reilly Media, Inc.</a>.
+    </div></body></html>

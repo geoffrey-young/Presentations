@@ -1,0 +1,146 @@
+<Directory />
+    Options +Includes
+</Directory>
+
+<IfDefine APACHE1>
+  PerlPostReadRequestHandler Cookbook::TrapNoHost
+  PerlTransHandler Cookbook::Favicon
+  PerlTransHandler My::ManualProxy
+
+  <Location /xbithack>
+    PerlFixupHandler Cookbook::XBitHack
+  </Location>
+
+  <IfModule @AUTH_MODULE@>
+    <Location /access>
+      AuthUserFile @ServerRoot@/htpasswd
+      PerlAccessHandler My::DefaultLogin
+
+      require valid-user
+      AuthType Basic
+      AuthName myhost
+    </Location>
+
+    <Location /authen>
+      PerlAuthenHandler My::Authenticate
+
+      require valid-user
+      AuthType Basic
+      AuthName myhost
+    </Location>
+
+    <Location /authzvaliduser>
+      PerlAuthenHandler My::Authenticate
+      PerlAuthzHandler My::Authorization
+
+      require valid-user
+      AuthType Basic
+      AuthName myhost
+    </Location>
+
+    <Location /authzuser>
+      PerlAuthenHandler My::Authenticate
+      PerlAuthzHandler My::Authorization
+
+      require user someuser
+      AuthType Basic
+      AuthName myhost
+    </Location>
+
+    <Location /authzgroup>
+      PerlAuthenHandler My::Authenticate
+      PerlAuthzHandler My::Authorization
+
+      require group DBA
+      AuthType Basic
+      AuthName myhost
+    </Location>
+  </IfModule>
+
+</IfDefine>
+
+<IfDefine APACHE2>
+  PerlPostReadRequestHandler Cookbook::TrapNoHost2
+  PerlTransHandler Cookbook::Favicon2
+  PerlTransHandler My::ManualProxy2
+
+  <Location /xbithack>
+    PerlFixupHandler Cookbook::XBitHack2
+  </Location>
+
+  <IfModule @AUTH_MODULE@>
+    <Location /access>
+      AuthUserFile @ServerRoot@/htpasswd
+      PerlAccessHandler My::DefaultLogin2
+
+      require valid-user
+      AuthType Basic
+      AuthName myhost
+    </Location>
+
+    <Location /authen>
+      PerlAuthenHandler My::Authenticate2
+
+      require valid-user
+      AuthType Basic
+      AuthName myhost
+    </Location>
+    <Location /authzvaliduser>
+      PerlAuthenHandler My::Authenticate2
+      PerlAuthzHandler My::Authorization2
+
+      require valid-user
+      AuthType Basic
+      AuthName myhost
+    </Location>
+
+    <Location /authzuser>
+      PerlAuthenHandler My::Authenticate2
+      PerlAuthzHandler My::Authorization2
+
+      require user someuser
+      AuthType Basic
+      AuthName myhost
+    </Location>
+
+    <Location /authzgroup>
+      PerlAuthenHandler My::Authenticate2
+      PerlAuthzHandler My::Authorization2
+
+      require group DBA
+      AuthType Basic
+      AuthName myhost
+    </Location>
+  </IfModule>
+
+  PerlOutputFilterHandler Apache::Hijack
+
+  Alias /php-app @DocumentRoot@
+  <Location /php-app>
+    AddType application/x-httpd-php .php
+  </Location>
+
+  Alias /php-script @DocumentRoot@
+  <Location /php-script>
+    SetHandler php-script
+  </Location>
+
+  <Location /level>
+    PerlOutputFilterHandler Apache::Clean
+  </Location>
+
+</IfDefine>
+
+<IfModule mod_proxy.c>
+  ProxyRequests On
+</IfModule>
+
+Alias /access @DocumentRoot@
+Alias /authen @DocumentRoot@
+Alias /authzvaliduser @DocumentRoot@
+Alias /authzuser @DocumentRoot@
+Alias /authzgroup @DocumentRoot@
+Alias /xbithack @DocumentRoot@
+Alias /level @DocumentRoot@
+
+PerlLogHandler "sub { warn shift->as_string; 0 }"

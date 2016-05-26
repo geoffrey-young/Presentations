@@ -1,0 +1,9 @@
+Alias /authen @DocumentRoot@
+
+<Location /authen>
+  Require valid-user
+  AuthType Basic
+  AuthName "my test realm"
+
+  PerlAuthenHandler My::AuthenHandler
+</Location>

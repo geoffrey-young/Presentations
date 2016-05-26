@@ -1,0 +1,32 @@
+Revision history for Perl extension Apache::Clean for mod_perl 2.0.
+
+2.00b  10.14.2002
+	- original port to mod_perl 2.0
+
+2.01b  03.04.2003
+	- major updates based on newfound knowledge
+        - mega kudos to Stas for taking the time
+          to work, listen, question, and answer 
+
+2.02b  03.07.2003
+	- fix Makefile.PL to install relative to Apache2 if required
+
+2.00_3  03.18.2003
+        - change VERSION scheme to signify beta to CPAN
+	- fix TEST.PL so that it includes Apache2.pm
+        - fix Makefile.PL - no need to check for Apache::Test
+          with a pure mod_perl 2.0 module (duh)
+        - add call to Apache::TestMM::filter_args()
+
+2.00_4  05.29.2003
+        - updates based on lots and lots of newfound knowledge
+          also syncs with perl.com article
+
+2.00_5  02.01.2005
+        - adjust t/05mod_cgi.t to create files relative to t/
+
+2.00_6  04.12.2005
+        - update for mod_perl 2.0-RC5 (1.999_22)
+
+2.00_7  04.14.2005
+        - fix pod so it matches the distribution

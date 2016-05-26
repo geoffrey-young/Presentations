@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"><title>Chapter 7. Incomplete Tests</title><link rel="stylesheet" href="docbook.css" type="text/css"></link><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></meta><link rel="start" href="index.html" title="PHPUnit Pocket Guide"></link><link rel="up" href="index.html" title="PHPUnit Pocket Guide"></link><link rel="prev" href="testing-exceptions-and-performance-regressions.html" title="Chapter 6. Testing Exceptions and Performance Regressions"></link><link rel="next" href="test-first-programming.html" title="Chapter 8. Test-First Programming"></link><script xmlns="" src="http://www.google-analytics.com/urchin.js" type="text/javascript"></script><script xmlns="" type="text/javascript">_uacct = "UA-68261-2";urchinTracker();</script></head><body><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 7. Incomplete Tests</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="testing-exceptions-and-performance-regressions.html">Prev</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="test-first-programming.html">Next</a></td></tr></table><hr></hr></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a id="incomplete-tests"></a>Chapter 7. Incomplete Tests</h2></div></div></div><p>
+    When you are working on a new test-case class, you might want to begin
+    by writing empty test methods such as: </p><pre class="programlisting"><code>public function testSomething() {
+}</code></pre><p> to keep track of the tests that you have to write. The
+    problem with empty test methods is that they are interpreted as a
+    success by the PHPUnit framework. This misinterpretation leads to the
+    test reports being useless -- you cannot see whether a test is actually
+    successful or just not yet implemented. Calling
+    <code class="literal">$this-&gt;fail()</code> in the unimplemented test method
+    does not help either, since then the test will be interpreted as a
+    failure. This would be just as wrong as interpreting an unimplemented
+    test as a success.
+  </p><p>
+    <a id="id397985" class="indexterm"></a>
+    <a id="id397993" class="indexterm"></a>
+    <a id="id398001" class="indexterm"></a>
+
+    If we think of a successful test as a green light and a test failure
+    as a red light, we need an additional yellow light to mark a test
+    as being incomplete or not yet implemented.
+    <code class="literal">PHPUnit2_Framework_IncompleteTest</code> is a marker
+    interface for marking an exception that is raised by a test method as
+    the result of the test being incomplete or currently not implemented.
+    <code class="literal">PHPUnit2_Framework_IncompleteTestError</code> is the
+    standard implementation of this interface.
+  </p><p>
+    <a href="incomplete-tests.html#incomplete-tests.examples.SampleTest.php" title="Example 7.1: Marking a test as incomplete">Example 7.1</a> shows a
+    test-case class, <code class="literal">SampleTest</code>, that contains one test
+    method, <code class="literal">testSomething()</code>. By raising the
+    <code class="literal">PHPUnit2_Framework_IncompleteTestError</code> exception in
+    the test method, we mark the test as being incomplete.
+  </p><div class="example"><a id="incomplete-tests.examples.SampleTest.php"></a><p class="title"><b>Example 7.1: Marking a test as incomplete</b></p><pre class="programlisting"><code><span style="color: #113d73;">&lt;?php</span><br /><span style="color: #005500;">require_once</span><span style="color: #113d73;">&nbsp;</span><span style="color: #550000;">'PHPUnit2/Framework/TestCase.php'</span><span style="color: #005500;">;</span><br /><span style="color: #005500;">require_once</span><span style="color: #113d73;">&nbsp;</span><span style="color: #550000;">'PHPUnit2/Framework/IncompleteTestError.php'</span><span style="color: #005500;">;</span><br />&nbsp;<br /><span style="color: #005500;">class</span><span style="color: #113d73;">&nbsp;</span><span style="color: #113d73;">SampleTest</span><span style="color: #113d73;">&nbsp;</span><span style="color: #005500;">extends</span><span style="color: #113d73;">&nbsp;</span><span style="color: #113d73;">PHPUnit2_Framework_TestCase</span><span style="color: #113d73;">&nbsp;</span><span style="color: #005500;">{</span><br /><span style="color: #113d73;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #005500;">public</span><span style="color: #113d73;">&nbsp;</span><span style="color: #005500;">function</span><span style="color: #113d73;">&nbsp;</span><span style="color: #113d73;">testSomething</span><span style="color: #005500;">(</span><span style="color: #005500;">)</span><span style="color: #113d73;">&nbsp;</span><span style="color: #005500;">{</span><br /><span style="color: #113d73;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #ba8370;">//&nbsp;Optional:&nbsp;Test&nbsp;anything&nbsp;here,&nbsp;if&nbsp;you&nbsp;want.</span><br /><span style="color: #113d73;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #113d73;">$this</span><span style="color: #005500;">-&gt;</span><span style="color: #113d73;">assertTrue</span><span style="color: #005500;">(</span><span style="color: #113d73;">TRUE</span><span style="color: #005500;">,</span><span style="color: #113d73;">&nbsp;</span><span style="color: #550000;">'This&nbsp;should&nbsp;already&nbsp;work.'</span><span style="color: #005500;">)</span><span style="color: #005500;">;</span><br />&nbsp;<br /><span style="color: #113d73;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #ba8370;">//&nbsp;Stop&nbsp;here&nbsp;and&nbsp;mark&nbsp;this&nbsp;test&nbsp;as&nbsp;incomplete.</span><br /><span style="color: #113d73;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #ba8370;">//&nbsp;You&nbsp;could&nbsp;use&nbsp;any&nbsp;Exception&nbsp;which&nbsp;implements&nbsp;the</span><br /><span style="color: #113d73;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #ba8370;">//&nbsp;PHPUnit2_Framework_IncompleteTest&nbsp;interface.</span><br /><span style="color: #113d73;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #005500;">throw</span><span style="color: #113d73;">&nbsp;</span><span style="color: #005500;">new</span><span style="color: #113d73;">&nbsp;</span><span style="color: #113d73;">PHPUnit2_Framework_IncompleteTestError</span><span style="color: #005500;">(</span><br /><span style="color: #113d73;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #550000;">'This&nbsp;test&nbsp;has&nbsp;not&nbsp;been&nbsp;implemented&nbsp;yet.'</span><br /><span style="color: #113d73;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #005500;">)</span><span style="color: #005500;">;</span><br /><span style="color: #113d73;">&nbsp;&nbsp;&nbsp;&nbsp;</span><span style="color: #005500;">}</span><br /><span style="color: #005500;">}</span><br /><span style="color: #113d73;">?&gt;</span><br /></code></pre></div><p>
+    An incomplete test is denoted by an <code class="literal">I</code> in the output
+    of the PHPUnit command-line test runner, as shown in the following
+    example:
+  </p><pre class="screen"><strong class="userinput"><code>phpunit SampleTest</code></strong>
+PHPUnit 2.3.0 by Sebastian Bergmann.
+
+I
+
+Time: 0.006657
+There was 1 incomplete test case:
+1) testSomething(SampleTest)
+This test has not been implemented yet.
+
+OK, but incomplete test cases!!!
+Tests run: 1, incomplete test cases: 1.</pre></div><div class="navfooter"><hr></hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="testing-exceptions-and-performance-regressions.html">Prev</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="test-first-programming.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 6. Testing Exceptions and Performance Regressions </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 8. Test-First Programming</td></tr></table></div><div xmlns="" class="copyright-notice"><a href="appendixes.copyright.html">Copyright</a> © 2005 <a href="http://www.sebastian-bergmann.de/">Sebastian Bergmann</a>
+      and <a href="http://www.oreilly.com/">O'Reilly Media, Inc.</a>.
+    </div></body></html>

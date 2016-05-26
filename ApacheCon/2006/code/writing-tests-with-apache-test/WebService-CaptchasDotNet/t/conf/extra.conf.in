@@ -1,0 +1,7 @@
+
+# make sure .cgi files are executed
+
+<Directory @DocumentRoot@>
+  Options +ExecCGI
+  AddHandler cgi-script .cgi
+</Directory>

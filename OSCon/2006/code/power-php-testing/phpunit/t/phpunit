@@ -1,0 +1,10 @@
+#!/usr/local/php/bin/php
+<?php
+
+$path = dirname(__FILE__) . '/..';
+$path = realpath($path);
+ini_set('include_path', ".:$path:$path/PEAR:$path/PEAR/PHPUnit2");
+
+require 'PHPUnit2/TextUI/TestRunner.php';
+
+?>

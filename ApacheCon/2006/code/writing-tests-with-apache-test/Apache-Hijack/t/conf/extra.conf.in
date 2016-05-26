@@ -1,0 +1,13 @@
+PerlLogHandler 'sub { use Apache2::RequestUtil; warn shift->as_string }'
+
+PerlOutputFilterHandler Apache::Hijack
+
+Alias /php-app @DocumentRoot@
+<Location /php-app>
+  AddType application/x-httpd-php .php
+</Location>
+
+Alias /php-script @DocumentRoot@
+<Location /php-script>
+  SetHandler php-script
+</Location>

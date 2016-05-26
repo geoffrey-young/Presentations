@@ -1,0 +1,13 @@
+for testing against a mod_perl 1.0 server
+
+  [ edit Makefile.PL and comment out the 'use Apache2;' line ]
+  $ perl Makefile.PL -httpd /usr/local/apache/bin/httpd
+  $ t/TEST -conf
+  $ t/TEST -verbose
+
+for testing against a mod_perl 2.0 server
+
+  [ edit Makefile.PL and uncomment the 'use Apache2;' line ]
+  $ perl Makefile.PL -apxs /usr/local/apache/bin/apxs
+  $ t/TEST -conf
+  $ t/TEST -verbose

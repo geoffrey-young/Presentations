@@ -1,0 +1,334 @@
+<html>
+<head>
+		<title>
+ONLamp.com: Testing PHP Code with PHPUnit</title>
+        <script language="javascript" src="/common.js"></script>
+<meta name="GOOGLEBOT" content="NOARCHIVE">
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+</head>
+<body  bgcolor="#ffffff" text="#000000">
+
+
+<a href="http://www.onlamp.com/">
+
+<img src="http://onlamp.com/images/onlamp/onlamp-logo.gif" alt="ONLamp.com" width="240" height="88" align="left" border="0" /></a>
+
+<dummy>&nbsp;&nbsp;&nbsp;</dummy>
+
+<br clear="all" />
+
+&nbsp;<font face="verdana,arial,helvetica" size="1">Published on <b>
+
+<a href="http://www.onlamp.com/">ONLamp.com</a></b> (<a href="http://www.onlamp.com/">http://www.onlamp.com/</a>)<br />
+
+ <!--  ---------- End of PERL ---------------------  -->
+
+
+&nbsp;http://www.onlamp.com/pub/a/php/2005/12/08/phpunit.html<br />
+&nbsp;<a href="/pub/a/general/print_code.html">See this</a> if you're having trouble printing code examples</font><br /><br clear="all" />
+
+<!-- CS_PAGE_BREAK -->
+<h2>
+Testing PHP Code with PHPUnit</h2>
+by <a href="/pub/au/258">Sebastian Bergmann</a>, author of <a href="http://www.oreilly.com/catalog/phpunitpg/">PHPUnit Pocket Guide</a><br />
+12/08/2005
+<!--  sidebar begins  -->
+<!--  don't move sidebars  -->
+<!--  sidebar ends  -->
+<p>The release of PHP 5 in July 2004 marked a significant leap in PHP's evolution--it enabled the development of large-scale applications to leverage the productivity, maintainability, and reusability of object-oriented design. While the language features introduced in PHP 5 are vital for this, the development of large-scale applications requires additional tools and techniques to be viable.</p>
+
+<p>PHPUnit is such a tool. It supports the development of object-oriented PHP applications using the concepts and methods of Agile Programming, Extreme Programming, Test-Driven Development, and Design-by-Contract Development by providing an elegant and robust framework for the creation, execution, and analysis of unit tests.</p>
+
+<h3>Automating Tests</h3>
+
+<p>Even good programmers make mistakes. The difference between a good programmer and a bad programmer is that the good programmer uses tests to detect his mistakes as soon as possible. The sooner you test for a mistake, the greater your chance of finding it and the less it will cost to find and fix. This explains why leaving testing until just before releasing the software is so problematic. Most errors are not caught at all, and the cost of fixing the ones you do catch is so high that you have to perform triage with the errors because you just cannot afford to fix them all.</p>
+
+<p>Testing with PHPUnit is an activity not totally different from what you should already be doing. It is just a different way of doing it. The difference is between <em>testing</em> (that is, checking that your program behaves as expected) and <em>performing a battery of tests</em> (using runnable code fragments that automatically test the correctness of parts, or units, of the software). These runnable code fragments are called <em>unit tests</em>.</p>
+
+<p>Imagine that your current task is to test PHP's built-in <code>Array</code>. One feature to test is the function <code>sizeof()</code>. For a newly created array, you expect the <code>sizeof()</code> function to return <code>0</code>. After an element is added, <code>sizeof()</code> should return <code>1</code>. When you start to test the numerous <code>array_*()</code> functions PHP offers, you need to write a test for each of them. You could write the infrastructure for all these tests from scratch. However, it is much better to write a testing infrastructure once and then write only the unique parts of each test.</p>
+
+<h3>Testing with PHPUnit</h3>
+
+<p>PHPUnit is such an infrastructure. It is a family of PEAR packages (PHPUnit, PHPUnit2) that I designed after proven solutions from the Java world (JUnit, junitour, and TestDox) and that is available from the PHP Extension and Application Repository (PEAR), a framework and distribution system for reusable PHP components. You can install it using the PEAR Installer by running</p>
+
+<pre><code>pear install PHPUnit2</code></pre>
+
+<p>Due to PEAR's version naming standard, the PHPUnit package for PHP 5 is PHPUnit2.</p>
+
+<p>The following example shows how you have to write your two tests to use them with PHPUnit.</p>
+
+<p><a id="examples.ArrayTest.php" name="examples.ArrayTest.php"></a>Example 1. Testing <code>Array</code> and <code>sizeof()</code> with PHPUnit</p>
+
+<pre><code>&lt;?php
+require_once 'PHPUnit2/Framework/TestCase.php';
+
+class ArrayTest extends PHPUnit2_Framework_TestCase {
+    public function testNewArrayIsEmpty() {
+        // Create the Array fixture.
+        $fixture = Array();
+
+        // Assert that the size of the Array fixture is 0.
+        $this-&gt;assertEquals(0, sizeof($fixture));
+    }
+
+    public function testArrayContainsAnElement() {
+        // Create the Array fixture.
+        $fixture = Array();
+
+        // Add an element to the Array fixture.
+        $fixture[] = 'Element';
+
+        // Assert that the size of the Array fixture is 1.
+        $this-&gt;assertEquals(1, sizeof($fixture));
+    }
+}
+?&gt;</code></pre>
+
+<p><a href="#examples.ArrayTest.php" title="Example 1. Testing Array and sizeof() with PHPUnit">Example 1</a> shows the basic steps for writing tests with PHPUnit:</p>
+
+<ul>
+<li>The tests for a class <code>Class</code> go into a class <code>ClassTest</code>.</li>
+
+<li><code>ClassTest</code> inherits (most of the time) from <code>PHPUnit2_Framework_TestCase</code>.</li>
+
+<li>The tests are public methods that expect no parameters and are named <code>test*</code>.</li>
+
+<li>Inside the test, assertion methods such as <code>assertEquals()</code> assert that an actual value matches an expected value.</li>
+</ul>
+
+<p>Invoke the PHPUnit command-line test runner through the <code>phpunit</code> command. The following code shows how to run tests with the PHPUnit command-line test runner:</p>
+
+<pre><code>$ <strong>phpunit ArrayTest</strong>
+PHPUnit 2.3.0 by Sebastian Bergmann.
+
+..
+
+Time: 0.067288
+
+OK (2 tests)</code></pre>
+
+<p>For each test run, the PHPUnit command-line tool prints one character to indicate progress:</p>
+
+<dl>
+<dt><code>.</code>
+</dt>
+
+<dd>Printed when the test succeeds.</dd>
+
+
+<dt><code>F</code>
+</dt>
+
+<dd>Printed when an assertion fails while running the test method.</dd>
+
+<dt><code>E</code>
+</dt>
+
+<dd>Printed when an error occurs while running the test method.</dd>
+
+<dt><code>I</code>
+</dt>
+
+<dd>Printed when the test is marked as being incomplete or not yet implemented.</dd>
+</dl>
+
+<p>PHPUnit distinguishes between failures and errors. A <em>failure</em> is a violated PHPUnit assertion. An <em>error</em> is an unexpected exception or a PHP error. Sometimes this distinction proves useful, since errors tend to be easier to fix than failures. If you have a big list of problems, it is best to tackle the errors first and see if you have any failures left when you have fixed them all.</p>
+
+<p>Change the expected value in the <code>testArrayContainsAnElement()</code> test from <code>1</code> to <code>0</code> and the test will fail. The following example shows how PHPUnit reports this failure:</p>
+
+<pre><code>$ <strong>phpunit ArrayTest</strong>
+PHPUnit 2.3.0 by Sebastian Bergmann.
+
+.F
+
+Time: 0.001147
+There was 1 failure:
+1) testArrayContainsAnElement(ArrayTest)
+expected same: &lt;0&gt; was not: &lt;1&gt;
+/home/sb/ArrayTest.php:21
+
+FAILURES!!!
+Tests run: 2, Failures: 1, Errors: 0, Incomplete Tests: 0.</code></pre>
+
+<p>The report shows where the failure occurs in the test code: in the test method <code>testArrayContainsAnElement()</code> of the test case class <code>ArrayTest</code>, in line 21 of the <em>/home/sb/ArrayTest.php</em> test code source file.</p>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="clear:left;"><tr><td><p class="secondary">
+<!-- CS_PAGE_INDEX -->
+</p></td><td><p class="secondary" align="right">
+<a href="<!--CS_NEXT_REF-->">
+ </a></p></td></tr></table>
+
+
+
+<!-- CS_PAGE_BREAK -->
+
+<p>
+
+
+
+
+<!-- CS_PAGE_INDEX -->
+</p>
+
+<h3>Sharing Setup Code</h3>
+
+<p>One of the most time-consuming parts of writing tests is writing the code to set the world up in a known state and then return it to its original state when the test is complete. This known state is the <em>fixture</em> of the test.</p>
+
+<p>In <a href="?page=1#examples.ArrayTest.php" title="Example 1. Testing Array and sizeof() with PHPUnit">Example 1</a>, the fixture was simply the array stored in the <code>$fixture</code> variable. Most of the time, though, the fixture will be more complex than a simple array, and the amount of code needed to set it up will grow accordingly. The actual content of the test gets lost in the noise of setting up the fixture. This problem gets even worse when you write several tests with similar fixtures. Without some help from the testing framework, you would have to duplicate the code that sets up the fixture for each test you write.</p>
+
+<p>PHPUnit supports sharing the setup code. Before running a test method, PHPUnit invokes a template method called <code>setUp()</code>. With <code>setUp()</code> you create the objects against which you will test. Once the test method has finished running, whether it succeeded or failed, PHPUnit invokes another template method called <code>tearDown()</code>. In <code>tearDown()</code> you clean up the objects against which you tested.</p>
+
+<p>You can now refactor <a href="?page=1#examples.ArrayTest.php" title="Example 1. Testing Array and sizeof() with PHPUnit">Example 1</a> and use <code>setUp()</code> to eliminate the code duplication. First declare the instance variable, <code>$fixture</code>, to use instead of a method-local variable. Then put the creation of the <code>Array</code> fixture into the <code>setUp()</code> method. Finally, remove the redundant code from the test methods and use the newly introduced instance variable, <code>$this-&gt;fixture</code>, instead of the method-local variable <code>$fixture</code> with the <code>assertEquals()</code> assertion method.</p>
+
+<p><a id="examples.ArrayTest2.php" name="examples.ArrayTest2.php"></a>Example 2. Using setUp() to create the Array fixture</p>
+
+<pre><code>&lt;?php
+require_once 'PHPUnit2/Framework/TestCase.php';
+
+class ArrayTest extends PHPUnit2_Framework_TestCase {
+    protected $fixture;
+
+    protected function setUp() {
+        // Create the Array fixture.
+        $this-&gt;fixture = Array();
+    }
+
+    public function testNewArrayIsEmpty() {
+        // Assert that the size of the Array fixture is 0.
+        $this-&gt;assertEquals(0, sizeof($this-&gt;fixture));
+    }
+
+    public function testArrayContainsAnElement() {
+        // Add an element to the Array fixture.
+        $this-&gt;fixture[] = 'Element';
+
+        // Assert that the size of the Array fixture is 1.
+        $this-&gt;assertEquals(1, sizeof($this-&gt;fixture));
+    }
+}
+?&gt;</code></pre>
+
+<p><code>setUp()</code> and <code>tearDown()</code> will run once for each test method run. While it might seem frugal to run these methods only once for all the test methods in a test-case class, doing so would make it hard to write tests that are completely independent of each other.</p>
+
+<h3>What PHPUnit Has to Offer</h3>
+
+<p>Automated tests give you justified confidence in your code. You can use this confidence to take more daring leaps in improving your design (Refactoring), get along with your teammates better (Cross-Team Tests), improve relations with your customers, and go home every night with proof that because of your efforts the system is better now than it was this morning. Once you get used to writing automated tests, you will likely discover more uses for tests.</p>
+
+<p>Extreme Programming, for example, demands <em>collective code ownership</em>, so all developers need to know how the entire system works. If you are disciplined enough to consequently use "speaking names" for your tests that describe what a class should do, you can use PHPUnit's TestDox feature to generate automated documentation for your project based on its tests. This documentation gives developers an overview of what each class of the project is supposed to do.</p>
+
+<p>Code-Coverage Analysis gives you an insight into what parts of the production code execute when the tests are run and helps to measure testing completeness.</p>
+
+<p>PHPUnit for PHP 5 is actively developed and maintained by Sebastian Bergmann. He is currently working on support for Mock Objects in PHPUnit 2.4, which he hopes to release later this year.</p>
+<p><i>
+<a href="/pub/au/258">Sebastian Bergmann</a> 
+is the author of a variety of PHP software projects such as <a href="http://sourceforge.net/projects/phpunit/">PHPUnit</a> and <a href="http://www.phpOpenTracker.de/">phpOpenTracker</a>.</p>
+
+</i></p>
+
+<!--  article_sidebar2.view begins  -->
+
+<div align="center">
+<div style="width:70%;border-top:1px solid #8d8d8d;border-bottom:1px solid #8d8d8d;margin:0.5em 0;padding:0.5em 0;">
+
+<table width="70%" border="0" cellspacing="0" cellpadding="0" align="center">
+
+<tr>
+<td valign="top" width="50%" align="center">
+
+
+
+<a href="http://www.oreilly.com/catalog/phpunitpg/index.html?CMP=ILL-4GV796923290"><img src="http://www.oreilly.com/catalog/covers/phpunitpg.s.gif" alt="PHPUnit Pocket Guide" border="0" hspace="20" /></a>
+</td>
+<td valign="top" width="50%"><p class="headline">Related Reading</p>
+<p class="medlist"><span class="title"><a href="http://www.oreilly.com/catalog/phpunitpg/index.html?CMP=ILL-4GV796923290">PHPUnit Pocket Guide</a></span><strong><br />
+
+By <a href="http://www.oreillynet.com/cs/catalog/view/au/258?x-t=book.view&CMP=IL7015">Sebastian Bergmann</a></strong>
+</p>
+<div class="secondary">
+<!--  builds links to list in sidebar  -->
+
+
+<br />
+<b><a href="http://safari.oreilly.com/0596101031">Read Online--Safari</a></b><br />
+<span class="tiny">Search this book on Safari:</span>
+<form action="http://safari.oreilly.com/JVXSL.asp" method="post">
+<input type="hidden" name="s" value="1" /><input type="hidden" name="b" value="1" />
+<input type="hidden" name="t" value="1" /><input type="hidden" name="f" value="1" />
+<input type="hidden" name="c" value="1" /><input type="hidden" name="l" value="1" />
+<input type="hidden" name="view" value="section" />
+<input tabindex="1" name="se_text" type="text" value="" size="15" />&nbsp;<input name="go" type="image" title="Execute the search" src="http://www.oreillynet.com/images/safari_btn_go.gif" width="23" height="17" border="0" align="absmiddle"  alt="Go" /><br />
+<select name="se_isbn">
+<option value="0-596-10103-1">Only This Book</option>
+<option value="">All of Safari</option>
+</select><br />
+<input type="checkbox" name="code" value="1" /><span class="tiny">Code Fragments only</span>
+</form>						  
+
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<!--  article_sidebar2.view ends  -->
+
+<p>Return to the <a href="http://www.onlamp.com/php">PHP DevCenter</a>.</p>
+
+
+
+
+
+
+<p><font face="verdana,arial,helvetica" size="1">Copyright &copy; 2005 O'Reilly Media, Inc.</font></p>
+
+ <!--WEBSIDESTORY CODE HBX1.0 (Universal)-->
+        <!--COPYRIGHT 1997-2004 WEBSIDESTORY,INC. ALL RIGHTS RESERVED. U.S.PATENT No. 6,393,479B1. MORE INFO:http://websidestory.com / privacy-->
+        <script language="javascript" type="text/javascript">
+        var _hbEC=0,_hbE=new Array;function _hbEvent(a,b){b=_hbE[_hbEC++]=new Object();b._N=a;b._C=0;return b;}
+    var hbx=_hbEvent("pv");hbx.vpc="HBX0100u";hbx.gn="ehg-oreilly.hitbox.com";
+
+var jlw = "JLW: www.onlamp.com,/a/6354";
+
+    hbx.acct="DM550308O2RV;DM520404M4ZR"; //ACCOUNT NUMBER(S)
+    hbx.pn="Testing+PHP+Code+with+PHPUnit"; //PAGE NAME(S)
+    hbx.mlc="/lpt/a/;/ONLamp.com/lpt/a/"; //MULTI-LEVEL CONTENT CATEGORY
+    hbx.pndef="title"; //DEFAULT PAGE NAME
+    hbx.ctdef="full"; //DEFAULT CONTENT CATEGORY
+
+    hbx.lt="auto"; //LINK TRACKING 
+    hbx.dlf="n"; //DOWNLOAD FILTER
+    hbx.dft="n"; //DOWNLOAD FILE NAMING
+    hbx.elf="n"; //EXIT LINK FILTER
+
+    //SEGMENTS AND FUNNELS
+    hbx.seg=""; //VISITOR SEGMENTATION
+    hbx.fnl=""; //FUNNELS
+
+    //CAMPAIGNS
+    hbx.cmp=""; //CAMPAIGN ID
+    hbx.cmpn="CMP"; //CAMPAIGN ID IN QUERY
+    hbx.hra=""; //RESPONSE ATTRIBUTE
+    hbx.hqsr=""; //RESPONSE ATTRIBUTE IN REFERRAL QUERY
+    hbx.hqsp="ATT"; //RESPONSE ATTRIBUTE IN QUERY
+    hbx.hlt=""; //LEAD TRACKING
+    hbx.hla=""; //LEAD ATTRIBUTE
+    hbx.gp=""; //CAMPAIGN GOAL
+    hbx.gpn=""; //CAMPAIGN GOAL IN QUERY
+    hbx.hcn=""; //CONVERSION ATTRIBUTE
+    hbx.hcv=""; //CONVERSION VALUE
+    hbx.cp="null"; //LEGACY CAMPAIGN
+    hbx.cpd=""; //CAMPAIGN DOMAIN
+
+    //CUSTOM VARIABLES
+    hbx.ci="";//CUSTOMER ID
+    hbx.hc1="";//CUSTOM 1
+    hbx.hc2="";//CUSTOM 2
+    hbx.hc3="";//CUSTOM 3
+    hbx.hc4="";//CUSTOM 4 
+    hbx.pec="";//ERROR CODES
+    </script><script language="javascript1.1" defer="defer"  src="http://www.oreillynet.com/hbx.js" type="text/javascript"></script><!--//-->  
+        <!-- END WEBSIDESTORY CODE  -->
+ </body>
+
+
+</html>

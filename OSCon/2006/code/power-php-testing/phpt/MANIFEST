@@ -1,0 +1,7 @@
+inc/functions.inc
+MANIFEST			This list of files
+t/authenticate_user.phpt
+t/create_user.phpt
+t/delete_user.phpt
+t/hash_password.phpt
+Makefile

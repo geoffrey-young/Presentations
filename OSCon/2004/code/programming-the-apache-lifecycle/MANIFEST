@@ -1,0 +1,37 @@
+Makefile.PL
+MANIFEST			This list of files
+README
+t/01trapnohost.t
+t/02favicon.t
+t/03proxy.t
+t/04access.t
+t/05authen.t
+t/06authz.t
+t/07fixup.t
+t/08hijack.t
+t/09clean.t
+t/Apache/Clean.pm
+t/Apache/Hijack.pm
+t/conf/extra.conf.in
+t/Cookbook/Favicon.pm
+t/Cookbook/Favicon2.pm
+t/Cookbook/TrapNoHost.pm
+t/Cookbook/TrapNoHost2.pm
+t/Cookbook/XBitHack.pm
+t/Cookbook/XBitHack2.pm
+t/htdocs/clean.html
+t/htdocs/foo.php
+t/htdocs/images/favicon.ico
+t/htdocs/manual/index.html
+t/htdocs/notexe.html
+t/htdocs/S_IXGRP.html
+t/htdocs/S_IXUSR.html
+t/My/Authenticate.pm
+t/My/Authenticate2.pm
+t/My/Authorization.pm
+t/My/Authorization2.pm
+t/My/DefaultLogin.pm
+t/My/DefaultLogin2.pm
+t/My/ManualProxy.pm
+t/My/ManualProxy2.pm
+META.yml                                 Module meta-data (added by MakeMaker)
