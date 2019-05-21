@@ -4,7 +4,7 @@ Talks I presented at [ApacheCon NA 2010](http://www.apachecon.com/c/acna2010/)
 
 ## Implementing Apache Solr at Ticketmaster: a Case Study
 
-*Implementing Apache Solr at Ticketmaster: a Case Study* was a standard, one hour presentation.
+*Implementing Apache Solr at Ticketmaster: a Case Study* was a standard, one hour presentation.  You can read about the talk in a [PC World article](http://pcworld.com/article/211946/article.html) covering my presentation at http://pcworld.com/article/211946/article.html.
 
 ### Description
 
